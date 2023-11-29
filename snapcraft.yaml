@@ -1,0 +1,62 @@
+name: llvm-aio
+version: git
+grade: stable
+confinement: strict
+base: core22
+summary: LLVM All-In-One toolchain
+description: LLVM All-In-One toolchain
+
+architectures:
+  - build-on: [amd64]
+    build-for: [amd64]
+  - build-on: [arm64]
+    build-for: [arm64]
+
+apps:
+  clang:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/clang
+    plugs: [ home, removable-media ]
+  clang++:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/clang++
+    plugs: [ home, removable-media ]
+  ld:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/ld
+    plugs: [ home, removable-media ]
+  lldb:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/lldb
+    plugs: [ home, removable-media, network ]
+
+parts:
+  llvm:
+    plugin: cmake
+    source: https://github.com/llvm/llvm-project.git
+    source-tag: llvmorg-17.0.6
+    source-subdir: llvm
+    cmake-parameters:
+      - -GNinja
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DLLVM_TARGETS_TO_BUILD="WebAssembly"
+      - -DLLVM_ENABLE_PROJECTS='clang;lld;lldb'
+      - -DLLVM_ENABLE_EH=ON
+      - -DLLVM_ENABLE_RTTI=ON
+      - -DLLVM_LINK_LLVM_DYLIB=ON
+      - -DLLDB_INCLUDE_TESTS=OFF
+      - -DCMAKE_BUILD_TYPE=Release
+    build-packages:
+      - cmake
+      - ninja-build
+      - build-essential
+      - dpkg-dev
+      - libssl-dev
+      - libcrypt-dev
+      - curl
+      - clang
+      - python3
