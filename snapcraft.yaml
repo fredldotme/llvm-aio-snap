@@ -12,6 +12,20 @@ architectures:
   - build-on: [arm64]
     build-for: [arm64]
 
+slots:
+  llvm-libraries:
+    interface: content
+    content: llvm-libraries
+    source:
+      read:
+        - $SNAP/usr/lib
+  llvm-headers:
+    interface: content
+    content: llvm-headers
+    source:
+      read:
+        - $SNAP/usr/include
+
 apps:
   clang:
     environment:
@@ -95,6 +109,7 @@ parts:
       - -DCMAKE_INSTALL_PREFIX=/usr
       - -DLLVM_TARGETS_TO_BUILD="all"
       - -DLLVM_ENABLE_PROJECTS='clang;lld;lldb'
+      - -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind"
       - -DLLVM_ENABLE_EH=ON
       - -DLLVM_ENABLE_RTTI=ON
       - -DLLVM_LINK_LLVM_DYLIB=ON
@@ -110,6 +125,9 @@ parts:
       - curl
       - clang
       - python3
+    stage-packages:
+      - libatomic1
+      - libc6-dev
   wrappers:
     plugin: dump
     source: wrappers/
