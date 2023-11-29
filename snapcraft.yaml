@@ -18,15 +18,30 @@ apps:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
     command: usr/bin/clang
     plugs: [ home, removable-media ]
-  clang++:
+  clang-plus-plus:
     environment:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
-    command: usr/bin/clang++
+    command: clangpp
     plugs: [ home, removable-media ]
-  ld:
+  ld-lld:
     environment:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
-    command: usr/bin/ld
+    command: usr/bin/ld.lld
+    plugs: [ home, removable-media ]
+  ld64-lld:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/ld64.lld
+    plugs: [ home, removable-media ]
+  wasm-ld:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/wasm-ld
+    plugs: [ home, removable-media ]
+  lld:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/lld
     plugs: [ home, removable-media ]
   lldb:
     environment:
@@ -60,3 +75,6 @@ parts:
       - curl
       - clang
       - python3
+  wrappers:
+    plugin: dump
+    source: wrappers/
