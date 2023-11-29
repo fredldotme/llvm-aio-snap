@@ -23,6 +23,16 @@ apps:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
     command: clangpp
     plugs: [ home, removable-media ]
+  ar:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/llvm-ar
+    plugs: [ home, removable-media ]
+  as:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/llvm-as
+    plugs: [ home, removable-media ]
   ld-lld:
     environment:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
@@ -38,6 +48,11 @@ apps:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
     command: usr/bin/wasm-ld
     plugs: [ home, removable-media ]
+  llc:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/llc
+    plugs: [ home, removable-media ]
   lld:
     environment:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
@@ -47,7 +62,27 @@ apps:
     environment:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
     command: usr/bin/lldb
-    plugs: [ home, removable-media, network ]
+    plugs: [ home, removable-media, network, system-trace ]
+  readobj:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/llvm-readobj
+    plugs: [ home, removable-media ]
+  objdump:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/llvm-objdump
+    plugs: [ home, removable-media ]
+  strip:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/llvm-strip
+    plugs: [ home, removable-media ]
+  llvm-config:
+    environment:
+      LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
+    command: usr/bin/llvm-config
+    plugs: [ home, removable-media ]
 
 parts:
   llvm:
@@ -58,7 +93,7 @@ parts:
     cmake-parameters:
       - -GNinja
       - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DLLVM_TARGETS_TO_BUILD="WebAssembly"
+      - -DLLVM_TARGETS_TO_BUILD="all"
       - -DLLVM_ENABLE_PROJECTS='clang;lld;lldb'
       - -DLLVM_ENABLE_EH=ON
       - -DLLVM_ENABLE_RTTI=ON
