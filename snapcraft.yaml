@@ -2,15 +2,17 @@ name: llvm-aio
 version: git
 grade: stable
 confinement: strict
-base: core22
+base: core24
 summary: LLVM All-In-One toolchain
 description: LLVM All-In-One toolchain
 
-architectures:
-  - build-on: [amd64]
-    build-for: [amd64]
-  - build-on: [arm64]
-    build-for: [arm64]
+platforms:
+  arm64:
+    build-on: [arm64]
+  amd64:
+    build-on: [amd64]
+  armhf:
+    build-on: [armhf]
 
 slots:
   llvm-libraries:
@@ -32,7 +34,7 @@ apps:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
     command: usr/bin/clang
     plugs: [ home, removable-media ]
-  clang-plus-plus:
+  clangpp:
     environment:
       LD_LIBRARY_PATH: ${SNAP}/lib:${SNAP}/usr/lib:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
     command: clangpp
@@ -102,7 +104,7 @@ parts:
   llvm:
     plugin: cmake
     source: https://github.com/llvm/llvm-project.git
-    source-tag: llvmorg-17.0.6
+    source-tag: llvmorg-22.1.0
     source-subdir: llvm
     cmake-parameters:
       - -GNinja
